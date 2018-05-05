@@ -177,7 +177,7 @@ describe('"minimax" returns the correct values', function(){
 			let minimaxValue = minimax(s, 32, 'x');
 			expect(typeof heuristicValue == 'number').to.equal(true);
 			expect(typeof minimaxValue == 'number').to.equal(true);
-			expect(heuristicValue == minimaxValue).to.equal(true);;
+			expect(heuristicValue == minimaxValue).to.equal(true);
 		}
 	});
 

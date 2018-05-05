@@ -73,8 +73,6 @@ const heuristic = (state, maximizingPlayer) => {
     // to their length.
     const advantageFunction = player => [2,3,4].reduce((total, numLines) =>
         total + state.numLines(numLines, player) * Math.pow(100, numLines), 0);
-
-    // Then for the heuristic, we just return the advantage
     // of the maximizing player, less the advantage of the
     // minimizing player.
     return advantageFunction(maximizingPlayer) - advantageFunction(minimizingPlayer);
@@ -98,7 +96,10 @@ const isBaseCase = (state, depth) => {
     const possibleSuccessorStates = state.nextStates();
     const numberPossibleSuccessorStates = possibleSuccessorStates.length;
     // Your code here.
-}
+    if (!depth) return true;
+    if (state.numLines(4, 'x') || state.numLines(4, 'o')) return true;
+    return false;
+};
 
 /*
  * minimax
@@ -114,15 +115,39 @@ const isBaseCase = (state, depth) => {
 const minimax = (state, depth, maximizingPlayer) => {
     if (isBaseCase(state, depth)) {
         // Invoke heuristic
+        return heuristic(state, maximizingPlayer);
     } else {
         // Possible states is an array of future states, of 
         // the same kind that gets passed into the "state"
         // paramter in minimax.
+
         const possibleStates = state.nextStates();
+        // if (possibleStates.length === 0) return 0
         const minimizingPlayer = maximizingPlayer === 'x' ? 'o' : 'x';
         const currentPlayer = state.nextMovePlayer;
         // Reduce to further
         // invocations of minimax.
+        // console.log(possibleStates);
+        // if (currentPlayer == currentPlayer) {
+            if (!possibleStates.length) return heuristic(state, maximizingPlayer)
+            let highestMaxState = possibleStates.reduce((currentState, nextState) => 
+                                    heuristic(currentState, maximizingPlayer) > heuristic (nextState, maximizingPlayer) ?
+                                    currentState = currentState : currentState = nextState);
+            
+            console.log(currentPlayer, maximizingPlayer);
+             return minimax(highestMaxState, depth-1, maximizingPlayer)
+            // else return minimax(highestMaxState, depth-1, maximizingPlayer)
+        // }
+        
+        // else {
+        //     if (!possibleStates.length) return heuristic(state, minimizingPlayer)
+        //     let highestMinState = (possibleStates.reduce((currentState, nextState) => 
+        // heuristic(currentState, minimizingPlayer) > heuristic (nextState, minimizingPlayer) ?
+        // currentState = currentState : currentState = nextState), minimizingPlayer);
+
+        //     return minimax(highestMinState, depth-1, minimizingPlayer);
+        // }
+        
     }
 }
 
